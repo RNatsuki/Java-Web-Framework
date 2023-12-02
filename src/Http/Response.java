@@ -1,6 +1,12 @@
 package Http;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Response {
   protected int statusCode = 200;
@@ -60,22 +66,64 @@ public class Response {
     }
   }
 
-  public  Response json(String data) {
+  public Response json(String data) {
     return ((new Response()).setContentType("application/json")
         .setContent(data));
   }
 
-  public  Response html(String data) {
+  public Response html(String data) {
     return ((new Response()).setContentType("text/html").setContent(data));
   }
 
-  public  Response text(String data) {
+  public Response text(String data) {
     return ((new Response()).setContentType("text/plain").setContent(data));
   }
 
-  public  Response redirect(String uri){
-    return ((new Response()).setStatusCode(302)).setHeader("Location",uri);
+  public Response redirect(String uri) {
+    return ((new Response()).setStatusCode(302)).setHeader("Location", uri);
   }
 
+  public Response view(String view) throws FileNotFoundException, IOException {
+    File file = new File("public_/" + view + ".html");
+
+    BufferedReader br = new BufferedReader(new FileReader(file));
+    String st;
+    String html = "";
+    while ((st = br.readLine()) != null) {
+      html += st;
+    }
+    br.close();
+
+    this.setContent(html);
+    this.setContentType("text/html");
+
+    return this;
+  }
+
+  public Response view(String view, Map<String, Object> data) throws FileNotFoundException, IOException {
+
+    File file = new File("public_/" + view + ".html");
+
+    BufferedReader br = new BufferedReader(new FileReader(file));
+    String st;
+    String html = "";
+    while ((st = br.readLine()) != null) {
+      html += st;
+    }
+    br.close();
+
+    System.out.println(data);
+
+    for (Map.Entry<String, Object> entry : data.entrySet()) {
+      html = html.replace("{{ " + entry.getKey() + " }}", entry.getValue().toString());
+    }
+
+    System.out.println(html);
+    this.setContent(html);
+    this.setContentType("text/html");
+
+    return this;
+
+  }
 
 }

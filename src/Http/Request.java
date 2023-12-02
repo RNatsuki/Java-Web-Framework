@@ -49,6 +49,10 @@ public class Request {
     return this.data;
   }
 
+  public String getData(String key) {
+    return this.data.get(key);
+  }
+
 
   public Request setPostData(HashMap<String, String> data) {
     this.data = data;

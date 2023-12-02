@@ -1,6 +1,11 @@
 package public_.Main;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import Http.Request;
 import Http.Response;
@@ -16,11 +21,24 @@ public class Main {
 
     router.post("/", (Request request, Response response) -> {
 
-      
-      System.out.println("Request data: " + request.data().toString());
+      // data in JSON format
+      String username = request.getData("username");
+      String password = request.getData("password");
 
+      if (username == null || password == null) {
+        return response.setContent("Username or password not found");
+      }
 
-      return response.setContent("Hello world");
+      return response.setContent("welcome " + username);
+    });
+
+    router.get("/html", (Request request, Response response) -> {
+      Map<String, Object> variables = new HashMap<>();
+      variables.put("title", "Página de inicio");
+      variables.put("message", "¡Hola, mundo!");
+
+      return response.view("index", variables);
+
     });
 
     Server server = new ServerImpl();
