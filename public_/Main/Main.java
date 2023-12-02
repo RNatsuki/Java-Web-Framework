@@ -1,7 +1,6 @@
 package public_.Main;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import Http.Request;
 import Http.Response;
@@ -15,18 +14,13 @@ public class Main {
 
     Router router = new Router();
 
-    router.get("/", (Request request, Response response) -> {
-      return response.json("{\"message\": \"Hello world\"}");
-    });
+    router.post("/", (Request request, Response response) -> {
 
-    // una ruta con parámetros
-
-
-    router.get("/users/{id}", (Request request, Response response) -> {
       
-      int id = Integer.parseInt(request.getParameter("id"));
+      System.out.println("Request data: " + request.data().toString());
 
-      return response.json("{\"message\": \"Hello world\", \"id\": " + id + "}");
+
+      return response.setContent("Hello world");
     });
 
     Server server = new ServerImpl();

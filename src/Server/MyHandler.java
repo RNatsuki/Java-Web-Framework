@@ -1,7 +1,11 @@
 package Server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+
+import com.google.gson.Gson;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -24,6 +28,7 @@ public class MyHandler implements HttpHandler {
   public void handle(HttpExchange t) throws IOException {
     try {
       Request request = createRequest(t);
+
       Response response = processRequest(request);
       sendResponse(t, response);
     } catch (IOException e) {
@@ -35,10 +40,20 @@ public class MyHandler implements HttpHandler {
     System.out.println("Request uri: " + t.getRequestURI().toString());
     System.out.println("Request method: " + t.getRequestMethod());
 
-
-    return new Request()
+    Request request = new Request()
         .setUri(t.getRequestURI().toString())
         .setMethod(HttpMethod.valueOf(t.getRequestMethod()));
+
+    if (request.method() == HttpMethod.POST) {
+      try {
+        request = setPostData(request, t);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+    }
+
+    return request;
 
   }
 
@@ -61,6 +76,42 @@ public class MyHandler implements HttpHandler {
     OutputStream os = t.getResponseBody();
     os.write(response.content().getBytes());
     os.close();
+  }
+
+  private Request setPostData(Request request, HttpExchange t) throws IOException {
+    InputStream is = t.getRequestBody();
+  
+    StringBuilder sb = new StringBuilder();
+    byte[] buffer = new byte[4096];
+    int bytesRead;
+    while ((bytesRead = is.read(buffer)) != -1) {
+      sb.append(new String(buffer, 0, bytesRead));
+    }
+  
+    String formData = sb.toString();
+    HashMap<String, String> postData = new HashMap<>();
+  
+    // Verificar si los datos están en formato JSON
+    try {
+      Gson gson = new Gson();
+      postData = gson.fromJson(formData, HashMap.class);
+    } catch (Exception e) {
+      // Si no está en formato JSON, asumir que está en formato de formulario
+      String[] keyValuePairs = formData.split("&");
+      for (String pair : keyValuePairs) {
+        String[] keyValue = pair.split("=");
+        if (keyValue.length == 2) {
+          String key = keyValue[0];
+          String value = keyValue[1];
+          postData.put(key, value);
+        }
+      }
+    }
+  
+    // Establecer el HashMap en el objeto Request
+    request.setPostData(postData);
+  
+    return request;
   }
 
 }

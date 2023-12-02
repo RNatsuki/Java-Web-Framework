@@ -13,7 +13,7 @@ public class Request {
   protected String uri;
   protected HttpMethod method;
 
-  protected ArrayList<String[]> data;
+  protected HashMap<String,String> data;
   protected ArrayList<String[]> query;
 
   protected Route<?> route;
@@ -45,11 +45,12 @@ public class Request {
     return this;
   }
 
-  public ArrayList<String[]> data() {
+  public HashMap<String,String> data() {
     return this.data;
   }
 
-  public Request setPostData(ArrayList<String[]> data) {
+
+  public Request setPostData(HashMap<String, String> data) {
     this.data = data;
     return this;
   }
@@ -86,5 +87,12 @@ public class Request {
     HashMap<String, String> parameters = this.route.parseParameters(uri);
     return parameters.get(key);
   }
+
+
+  public void setData(HashMap<String, String> data) {
+    this.data = data;
+  }
+
+
 
 }
