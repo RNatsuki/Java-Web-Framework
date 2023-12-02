@@ -10,11 +10,16 @@ import Routing.Router;
 public class ServerImpl implements Server {
 
   @Override
-  public void start(Router router) throws IOException {
-    HttpServer Server = HttpServer.create(new InetSocketAddress(8080), 0);
+  public void start(Router router)  {
+    try {
+      HttpServer Server = HttpServer.create(new InetSocketAddress(8080), 0);
     Server.createContext("/", new MyHandler(router));
     Server.setExecutor(null);
     Server.start();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    
   }
 
   @Override

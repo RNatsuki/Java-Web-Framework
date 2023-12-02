@@ -35,6 +35,7 @@ public class MyHandler implements HttpHandler {
     System.out.println("Request uri: " + t.getRequestURI().toString());
     System.out.println("Request method: " + t.getRequestMethod());
 
+
     return new Request()
         .setUri(t.getRequestURI().toString())
         .setMethod(HttpMethod.valueOf(t.getRequestMethod()));
@@ -46,7 +47,12 @@ public class MyHandler implements HttpHandler {
       Route<Response> route = router.resolve(request);
       return route.action().call(request, new Response());
     } catch (HttpNotFound | Exception e) {
-      return new Response().setStatusCode(404).setContent("Not found");
+      if (e instanceof HttpNotFound) {
+        return new Response().setStatusCode(404).setContent("Not found");
+      } else {
+        e.printStackTrace();
+        return new Response().setStatusCode(500).setContent(e.getMessage());
+      }
     }
   }
 
@@ -56,4 +62,5 @@ public class MyHandler implements HttpHandler {
     os.write(response.content().getBytes());
     os.close();
   }
+
 }

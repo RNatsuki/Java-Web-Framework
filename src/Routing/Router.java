@@ -21,6 +21,7 @@ public class Router {
   public Route<Response> resolve(Request request) {
     for (Route<Response> route : this.routes.get(request.method())) {
       if (route.matches(request.uri())) {
+        request.setRoute(route);
         return route;
       }
     }
