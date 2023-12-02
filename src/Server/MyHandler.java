@@ -72,9 +72,10 @@ public class MyHandler implements HttpHandler {
   }
 
   private void sendResponse(HttpExchange t, Response response) throws IOException {
-    t.sendResponseHeaders(response.statusCode(), response.content().length());
-    OutputStream os = t.getResponseBody();
-    os.write(response.content().getBytes());
+   byte[] contentBytes = response.content().getBytes();
+   t.sendResponseHeaders(response.statusCode(), contentBytes.length);
+   OutputStream os = t.getResponseBody();
+    os.write(contentBytes);
     os.close();
   }
 
@@ -90,8 +91,7 @@ public class MyHandler implements HttpHandler {
   
     String formData = sb.toString();
     HashMap<String, String> postData = new HashMap<>();
-  
-    // Verificar si los datos están en formato JSON
+
     try {
       Gson gson = new Gson();
       postData = gson.fromJson(formData, HashMap.class);
@@ -107,8 +107,6 @@ public class MyHandler implements HttpHandler {
         }
       }
     }
-  
-    // Establecer el HashMap en el objeto Request
     request.setPostData(postData);
   
     return request;
