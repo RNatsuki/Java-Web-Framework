@@ -84,7 +84,11 @@ public class Response {
   }
 
   public Response view(String view) throws FileNotFoundException, IOException {
-    File file = new File("public_/" + view + ".html");
+
+    //print the current working directory
+    System.out.println("Working Directory = " + System.getProperty("user.dir"));
+
+    File file = new File("src/Resources/views/" + view + ".html");
 
     BufferedReader br = new BufferedReader(new FileReader(file));
     String st;
@@ -101,8 +105,10 @@ public class Response {
   }
 
   public Response view(String view, Map<String, Object> data) throws FileNotFoundException, IOException {
+    //Resources/views/index.html
 
-    File file = new File("public_/" + view + ".html");
+    File file = new File("src/Resources/views/" + view + ".html");
+    //File file = new File("public_/" + view + ".html");
 
     BufferedReader br = new BufferedReader(new FileReader(file));
     String st;
@@ -117,8 +123,6 @@ public class Response {
     for (Map.Entry<String, Object> entry : data.entrySet()) {
       html = html.replace("{{ " + entry.getKey() + " }}", entry.getValue().toString());
     }
-
-    System.out.println(html);
     this.setContent(html);
     this.setContentType("text/html");
 

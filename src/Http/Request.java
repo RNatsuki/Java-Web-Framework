@@ -77,9 +77,6 @@ public class Request {
     return null;
   }
 
-  public String toString() {
-    return this.method + " " + this.uri;
-  }
 
   
   public HashMap<String, String> getParsedParameters() {
