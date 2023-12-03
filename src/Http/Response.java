@@ -98,7 +98,6 @@ public class Response {
   public Response view(String view) throws FileNotFoundException, IOException {
 
     //print the current working directory
-    System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
     File file = new File("src/Resources/views/" + view + ".html");
 
@@ -130,8 +129,6 @@ public class Response {
     }
     br.close();
 
-    System.out.println(data);
-
     for (Map.Entry<String, Object> entry : data.entrySet()) {
       html = html.replace("{{ " + entry.getKey() + " }}", entry.getValue().toString());
     }
@@ -142,4 +139,5 @@ public class Response {
 
   }
 
+  
 }

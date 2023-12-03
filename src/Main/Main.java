@@ -23,6 +23,9 @@ public class Main {
 
       params.put("username", request.getParameter("username"));
 
+      // Send params as Object to the view new Object[]{params} params = {username:
+      // "John"}
+
       return response.view("user", params);
     });
 
