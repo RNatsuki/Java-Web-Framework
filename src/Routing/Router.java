@@ -34,23 +34,23 @@ public class Router {
     this.routes.get(method).add(new Route<Response>(uri, method, action));
   }
 
-  public void get(String uri, Action action) {
+  public void getObject(String uri, Action action) {
     this.registerRoute(HttpMethod.GET, uri, action);
   }
 
-  public void post(String uri, Action action) {
+  public void postObject(String uri, Action action) {
     this.registerRoute(HttpMethod.POST, uri, action);
   }
 
-  public void put(String uri, Action action) {
+  public void putObject(String uri, Action action) {
     this.registerRoute(HttpMethod.PUT, uri, action);
   }
 
-  public void delete(String uri, Action action) {
+  public void deleteObject(String uri, Action action) {
     this.registerRoute(HttpMethod.DELETE, uri, action);
   }
 
-  public void patch(String uri, Action action) {
+  public void patchObject(String uri, Action action) {
     this.registerRoute(HttpMethod.PATCH, uri, action);
   }
 
@@ -65,24 +65,24 @@ public class Router {
     return instance;
   }
 
-  public static void getStatic(String uri, Action action) {
-    getInstance().get(uri, action);
+  public static void get(String uri, Action action) {
+    getInstance().getObject(uri, action);
   }
 
-  public static void postStatic(String uri, Action action) {
-    getInstance().post(uri, action);
+  public static void post(String uri, Action action) {
+    getInstance().postObject(uri, action);
   }
 
-  public static void putStatic(String uri, Action action) {
-    getInstance().put(uri, action);
+  public static void put(String uri, Action action) {
+    getInstance().putObject(uri, action);
   }
 
-  public static void deleteStatic(String uri, Action action) {
-    getInstance().delete(uri, action);
+  public static void delete(String uri, Action action) {
+    getInstance().deleteObject(uri, action);
   }
 
-  public static void patchStatic(String uri, Action action) {
-    getInstance().patch(uri, action);
+  public static void patch(String uri, Action action) {
+    getInstance().patchObject(uri, action);
   }
 
 

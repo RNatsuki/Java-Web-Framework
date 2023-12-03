@@ -17,8 +17,12 @@ public class Main {
 
   public static void main(String[] args) throws IOException {
 
-    Router.getStatic("/", (Request request, Response response) -> {
-      return response.setContent("Hello World");
+    Router.get("/", (Request request, Response response) -> {
+      return response.setStatusCode(302).redirect("/test");
+    });
+
+    Router.get("/test", (Request request, Response response) -> {
+      return response.setStatusCode(200).setContent("Hello World");
     });
 
     Server server = new ServerImpl();
