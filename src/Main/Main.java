@@ -28,7 +28,6 @@ public class Main {
 
     router.get("/", (Request request, Response response) -> {
 
-     
       return response.redirect("/user/John");
     });
 

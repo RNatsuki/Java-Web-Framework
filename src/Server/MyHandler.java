@@ -73,18 +73,26 @@ public class MyHandler implements HttpHandler {
 
   private void sendResponse(HttpExchange t, Response response) throws IOException {
     if (response.statusCode() == 302) {
-        String location = response.getHeader("Location");
-        t.getResponseHeaders().set("Location", location);
-        t.sendResponseHeaders(response.statusCode(), 0);
-        t.close();
+      String location = response.getHeader("Location");
+      t.getResponseHeaders().set("Location", location);
+      t.sendResponseHeaders(response.statusCode(), 0);
+      t.close();
     } else {
-        byte[] contentBytes = response.content().getBytes();
-        t.sendResponseHeaders(response.statusCode(), contentBytes.length);
-        OutputStream os = t.getResponseBody();
+      byte[] contentBytes = response.content().getBytes();
+      t.sendResponseHeaders(response.statusCode(), contentBytes.length);
+      OutputStream os = t.getResponseBody();
+
+      try {
         os.write(contentBytes);
+      } catch (Exception e) {
+        e.printStackTrace();
+      } finally {
         os.close();
+      }
+
+
     }
-}
+  }
 
   private Request setPostData(Request request, HttpExchange t) throws IOException {
     InputStream is = t.getRequestBody();
