@@ -15,7 +15,7 @@ public class Main {
     new Web();
 
     Server server = new ServerImpl();
-
+    
     server.start();
 
   }

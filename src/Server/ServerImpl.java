@@ -1,6 +1,5 @@
 package Server;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.*;
@@ -8,6 +7,7 @@ import com.sun.net.httpserver.*;
 import Routing.Router;
 
 public class ServerImpl implements Server {
+  
 
   @Override
   public void start() {
@@ -17,7 +17,7 @@ public class ServerImpl implements Server {
       Server.setExecutor(null);
       Server.start();
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      /* System.out.println(e.getMessage()); */
     }
 
   }
