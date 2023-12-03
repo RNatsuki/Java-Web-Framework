@@ -12,6 +12,8 @@ import Interfaces.Action;
 public class Router {
   protected HashMap<HttpMethod, ArrayList<Route<Response>>> routes = new HashMap<HttpMethod, ArrayList<Route<Response>>>();
 
+  private static Router instance = null;
+
   public Router() {
     for (HttpMethod method : HttpMethod.values()) {
       this.routes.put(method, new ArrayList<Route<Response>>());
@@ -51,5 +53,37 @@ public class Router {
   public void patch(String uri, Action action) {
     this.registerRoute(HttpMethod.PATCH, uri, action);
   }
+
+
+
+/* Singleton and Static Methods */
+
+  public static Router getInstance() {
+    if (instance == null) {
+      instance = new Router();
+    }
+    return instance;
+  }
+
+  public static void getStatic(String uri, Action action) {
+    getInstance().get(uri, action);
+  }
+
+  public static void postStatic(String uri, Action action) {
+    getInstance().post(uri, action);
+  }
+
+  public static void putStatic(String uri, Action action) {
+    getInstance().put(uri, action);
+  }
+
+  public static void deleteStatic(String uri, Action action) {
+    getInstance().delete(uri, action);
+  }
+
+  public static void patchStatic(String uri, Action action) {
+    getInstance().patch(uri, action);
+  }
+
 
 }

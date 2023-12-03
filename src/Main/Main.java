@@ -16,27 +16,14 @@ import Server.ServerImpl;
 public class Main {
 
   public static void main(String[] args) throws IOException {
-    Router router = new Router();
 
-    router.get("/user/{username}", (Request request, Response response) -> {
-      Map<String, Object> params = new HashMap<>();
-
-      params.put("username", request.getParameter("username"));
-
-      // Send params as Object to the view new Object[]{params} params = {username:
-      // "John"}
-
-      return response.view("user", params);
-    });
-
-    router.get("/", (Request request, Response response) -> {
-
-      return response.redirect("/user/John");
+    Router.getStatic("/", (Request request, Response response) -> {
+      return response.setContent("Hello World");
     });
 
     Server server = new ServerImpl();
 
-    server.start(router);
+    server.start(Router.getInstance());
 
   }
 }

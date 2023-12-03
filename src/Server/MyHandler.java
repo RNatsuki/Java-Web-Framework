@@ -3,6 +3,7 @@ package Server;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -30,6 +31,12 @@ public class MyHandler implements HttpHandler {
       Request request = createRequest(t);
 
       Response response = processRequest(request);
+
+      //if response is not fount then send 404
+      if(response.statusCode() == 404){
+        response = new Response().setStatusCode(404).setContent("Not found");
+      }
+
       sendResponse(t, response);
     } catch (IOException e) {
       e.printStackTrace();
@@ -78,19 +85,20 @@ public class MyHandler implements HttpHandler {
       t.sendResponseHeaders(response.statusCode(), 0);
       t.close();
     } else {
-      byte[] contentBytes = response.content().getBytes();
+      byte[] contentBytes = response.content().getBytes(StandardCharsets.UTF_8);
       t.sendResponseHeaders(response.statusCode(), contentBytes.length);
       OutputStream os = t.getResponseBody();
-
+  
       try {
         os.write(contentBytes);
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (IOException e) {
+        // Handle the exception here. For example:
+        System.err.println("Error writing to output stream: " + e.getMessage());
+        // Or you might want to send a response with an error status code.
       } finally {
+        os.flush();
         os.close();
       }
-
-
     }
   }
 
