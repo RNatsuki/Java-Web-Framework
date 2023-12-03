@@ -72,23 +72,30 @@ public class MyHandler implements HttpHandler {
   }
 
   private void sendResponse(HttpExchange t, Response response) throws IOException {
-   byte[] contentBytes = response.content().getBytes();
-   t.sendResponseHeaders(response.statusCode(), contentBytes.length);
-   OutputStream os = t.getResponseBody();
-    os.write(contentBytes);
-    os.close();
-  }
+    if (response.statusCode() == 302) {
+        String location = response.getHeader("Location");
+        t.getResponseHeaders().set("Location", location);
+        t.sendResponseHeaders(response.statusCode(), 0);
+        t.close();
+    } else {
+        byte[] contentBytes = response.content().getBytes();
+        t.sendResponseHeaders(response.statusCode(), contentBytes.length);
+        OutputStream os = t.getResponseBody();
+        os.write(contentBytes);
+        os.close();
+    }
+}
 
   private Request setPostData(Request request, HttpExchange t) throws IOException {
     InputStream is = t.getRequestBody();
-  
+
     StringBuilder sb = new StringBuilder();
     byte[] buffer = new byte[4096];
     int bytesRead;
     while ((bytesRead = is.read(buffer)) != -1) {
       sb.append(new String(buffer, 0, bytesRead));
     }
-  
+
     String formData = sb.toString();
     HashMap<String, String> postData = new HashMap<>();
 
@@ -108,7 +115,7 @@ public class MyHandler implements HttpHandler {
       }
     }
     request.setPostData(postData);
-  
+
     return request;
   }
 

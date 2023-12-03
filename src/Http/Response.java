@@ -26,6 +26,16 @@ public class Response {
     return this.headers;
   }
 
+  public String getHeader(String key) {
+    for (String[] header : headers) {
+      if (header[0].equals(key)) {
+        return header[1];
+      }
+    }
+    return null;
+  }
+
+
   public Response setHeader(String key, String value) {
     String[] header = new String[2];
     header[0] = key;
@@ -80,7 +90,9 @@ public class Response {
   }
 
   public Response redirect(String uri) {
-    return ((new Response()).setStatusCode(302)).setHeader("Location", uri);
+    
+    return this.setHeader("Location", uri).setStatusCode(302);
+
   }
 
   public Response view(String view) throws FileNotFoundException, IOException {

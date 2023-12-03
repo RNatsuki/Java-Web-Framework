@@ -18,17 +18,18 @@ public class Main {
   public static void main(String[] args) throws IOException {
     Router router = new Router();
 
-    router.get("/", (Request request, Response response) -> {
-      response.setContent("Hello World");
-      return response;
-    });
-
     router.get("/user/{username}", (Request request, Response response) -> {
       Map<String, Object> params = new HashMap<>();
 
       params.put("username", request.getParameter("username"));
 
-      return response.view("user",params);
+      return response.view("user", params);
+    });
+
+    router.get("/", (Request request, Response response) -> {
+
+     
+      return response.redirect("/user/John");
     });
 
     Server server = new ServerImpl();
