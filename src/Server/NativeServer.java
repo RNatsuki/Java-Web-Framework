@@ -7,9 +7,9 @@ import com.sun.net.httpserver.*;
 import Http.Routes.Web;
 import Routing.Router;
 
-public class ServerImpl implements Server {
+public class NativeServer implements Server {
   int port = -1;
-  public ServerImpl(int port){
+  public NativeServer(int port){
     this.port = port;
     new Web();
   }
